@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engineering Exploration Lab — Dilpreet Singh</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Navigation: Lab 1 - Lab 6, then Project -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">EE Lab<span>.</span></a>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#lab-1">Lab 1</a>
+        <a href="#lab-2">Lab 2</a>
+        <a href="#lab-3">Lab 3</a>
+        <a href="#lab-4">Lab 4</a>
+        <a href="#lab-5">Lab 5</a>
+        <a href="#lab-6">Lab 6</a>
+        <a href="#project">Project</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill">Dilpreet Singh · Engineering Exploration Lab</span>
+        <h1>ENGINEERING EXPLORATION LAB</h1>
+        <p class="subtitle">
+          Complete lab log covering Lab 1 through Lab 6 and our final Smart Waste Segregation prototype.
+        </p>
+        <div class="hero-actions">
+          <a href="#lab-1" class="btn btn-primary">Start at Lab 1</a>
+          <a href="#project" class="btn btn-outline">Jump to Project</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="status-bar">
+          <span class="dot green"></span>
+          <span>sequence: lab1 → lab6 → project</span>
+        </div>
+        <div class="pin-row">
+          <div class="pin active">LAB 1–3</div>
+          <div class="pin active">LAB 4</div>
+          <div class="pin">LAB 5–6</div>
+          <div class="pin active">PROJECT</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat"><strong>6</strong><span>Labs</span></div>
+          <div class="stat"><strong>1</strong><span>Final Project</span></div>
+          <div class="stat"><strong>Muted</strong><span>Video Audio</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 1 -->
+  <section id="lab-1" class="section">
+    <div class="container">
+      <span class="section-tag">Lab 01</span>
+      <h2>LED Interfacing and Programming</h2>
+      <p class="section-desc">
+        Controlling LEDs on digital pins (8, 9, 10, 11) using <code>pinMode()</code>, <code>digitalWrite()</code>, loops, and <code>delay()</code>.
+      </p>
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>Overview</h3>
+          <p>
+            LEDs wired through resistors to Arduino UNO digital pins turn HIGH (5 V) and LOW (0 V) to form single-blink,
+            sequential, running, alternating, and all-blink patterns.
+          </p>
+        </div>
+        <div class="media-card">
+          <video class="silent-video" controls muted loop playsinline preload="metadata">
+            <source src="assets/lab1_demo1.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Lab 1 Demo (Muted): LED pattern demonstration on Arduino UNO.</p>
+        </div>
+      </div>
+      <div class="code-box-wrapper">
+        <div class="code-header"><span>lab1_led_patterns.ino</span><button class="copy-btn">Copy</button></div>
+        <pre><code>int led[] = {8, 9, 10, 11};
+
+void setup() {
+  for (int i = 0; i < 4; i++) {
+    pinMode(led[i], OUTPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(led[i], HIGH);
+    delay(250);
+    digitalWrite(led[i], LOW);
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 2 -->
+  <section id="lab-2" class="section alt-bg">
+    <div class="container">
+      <span class="section-tag">Lab 02</span>
+      <h2>Potentiometer & Analog / PWM Control</h2>
+      <p class="section-desc">
+        Reading a rotary potentiometer on an analog pin (0–1023) with <code>analogRead()</code> and scaling outputs with <code>map()</code> and <code>analogWrite()</code>.
+      </p>
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>Hardware & Signal Flow</h3>
+          <p>
+            Turning the potentiometer knob varies voltage between 0 V and 5 V on the wiper pin. The Arduino converts this into a 10-bit reading (0–1023) to drive PWM brightness or select modes.
+          </p>
+        </div>
+        <div class="media-card">
+          <video class="silent-video" controls muted loop playsinline preload="metadata">
+            <source src="assets/video_2.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Lab 2 Hardware (Muted): Rotary potentiometer wired with three jumper leads to the Arduino UNO.</p>
+        </div>
+      </div>
+      <div class="code-box-wrapper">
+        <div class="code-header"><span>lab2_pot_pwm.ino</span><button class="copy-btn">Copy</button></div>
+        <pre><code>const int potPin = A0;
+const int ledPin = 9;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int potValue = analogRead(potPin);
+  int brightness = map(potValue, 0, 1023, 0, 255);
+  analogWrite(ledPin, brightness);
+  Serial.println(potValue);
+  delay(100);
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 3 -->
+  <section id="lab-3" class="section">
+    <div class="container">
+      <span class="section-tag">Lab 03</span>
+      <h2>Ultrasonic Sensor (HC-SR04) Distance & Threshold</h2>
+      <p class="section-desc">
+        Measuring object distance in centimetres using the HC-SR04 ultrasonic sensor and turning ON an LED based on a fixed 10 cm limit or a potentiometer-selected threshold.
+      </p>
+
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>Sensor Working Principle</h3>
+          <p>
+            A 10 µs pulse on <code>trigPin</code> (Pin 9) sends an ultrasonic burst, and <code>pulseIn(echoPin, HIGH)</code> on Pin 10 measures echo time. Distance is calculated as <code>duration * 0.0343 / 2</code> in cm.
+          </p>
+        </div>
+        <div class="media-card">
+          <video class="silent-video" controls muted loop playsinline preload="metadata">
+            <source src="assets/video_1.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Lab 3 Sensor Test (Muted): Serial Monitor displaying measured distance and threshold values.</p>
+        </div>
+      </div>
+
+      <div class="code-box-wrapper">
+        <div class="tab-bar" data-group="lab3">
+          <button class="tab-btn active" data-target="l3-prog1">Program 1: Fixed 10 cm LED</button>
+          <button class="tab-btn" data-target="l3-prog2">Program 2: Potentiometer Threshold</button>
+        </div>
+
+        <div id="l3-prog1" class="code-panel active">
+          <div class="code-header"><span>lab3_hc_sr04_10cm.ino</span><button class="copy-btn">Copy</button></div>
+          <pre><code>// LAB-3 Program: Interface HC-SR04 ultrasonic sensor, display cm on Serial Monitor,
+// and turn ON LED when object is within 10 cm.
+const int trigPin = 9;
+const int echoPin = 10;
+const int ledPin = 13;
+long duration;
+float distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.0343 / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  if (distance <= 10) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+  delay(500);
+}</code></pre>
+        </div>
+
+        <div id="l3-prog2" class="code-panel">
+          <div class="code-header"><span>lab3_hc_sr04_threshold.ino</span><button class="copy-btn">Copy</button></div>
+          <pre><code>// Program Statement: Measure distance with HC-SR04, set threshold with potentiometer,
+// and turn ON LED whenever distance < threshold.
+const int trigPin = 9;
+const int echoPin = 10;
+const int potPin = A0;
+const int ledPin = 13;
+long duration;
+float distance;
+int potValue;
+int threshold;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read potentiometer and map it to 5-50 cm
+  potValue = analogRead(potPin);
+  threshold = map(potValue, 0, 1023, 5, 50);
+
+  // Trigger ultrasonic sensor
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Measure echo duration
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in cm
+  distance = duration * 0.0343 / 2;
+
+  // Display values on Serial Monitor
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.print(" cm");
+  Serial.print("   Threshold: ");
+  Serial.print(threshold);
+  Serial.println(" cm");
+
+  // LED control
+  if (distance < threshold) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+  delay(500);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 4 -->
+  <section id="lab-4" class="section alt-bg">
+    <div class="container">
+      <span class="section-tag">Lab 04</span>
+      <h2>Bluetooth App Light Control</h2>
+      <p class="section-desc">
+        Controlling lights/LEDs wirelessly from a smartphone Bluetooth app over serial communication to the Arduino UNO.
+      </p>
+
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>How It Works</h3>
+          <p>
+            Commands sent from the mobile Bluetooth app (such as <code>'1'</code> or <code>'F'</code> to turn the light ON, and <code>'0'</code> or <code>'B'</code> to turn it OFF) are read via <code>Serial.read()</code> on the Arduino UNO to switch the output pin HIGH or LOW.
+          </p>
+        </div>
+        <div class="media-card">
+          <video class="silent-video" controls muted loop playsinline preload="metadata">
+            <source src="assets/video_3.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Lab 4 Bluetooth Demo (Muted): Toggling the control on the mobile app with the Arduino circuit active.</p>
+        </div>
+      </div>
+
+      <div class="code-box-wrapper">
+        <div class="code-header"><span>lab4_bluetooth_light.ino</span><button class="copy-btn">Copy</button></div>
+        <pre><code>// Lab 4: Control light / LED via Bluetooth app serial commands
+const int lightPin = 13; // Connected to LED / relay control pin
+char command;
+
+void setup() {
+  pinMode(lightPin, OUTPUT);
+  digitalWrite(lightPin, LOW);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    command = Serial.read();
+
+    if (command == '1' || command == 'F' || command == 'f') {
+      digitalWrite(lightPin, HIGH); // Turn light ON
+    } else if (command == '0' || command == 'B' || command == 'b') {
+      digitalWrite(lightPin, LOW);  // Turn light OFF
+    }
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 5 -->
+  <section id="lab-5" class="section">
+    <div class="container">
+      <span class="section-tag">Lab 05</span>
+      <h2>MIT App Inventor Application</h2>
+      <p class="section-desc">
+        Designing a visual mobile application interface and event blocks in MIT App Inventor.
+      </p>
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>App Design</h3>
+          <p>
+            Built using MIT App Inventor components (input fields, action buttons, and result/status labels) to handle user input cleanly on Android.
+          </p>
+        </div>
+        <div class="media-card">
+          <img src="assets/app_inventor_1.jpg" alt="MIT App Inventor screen" />
+          <p class="caption">Lab 5 Screenshot: MIT App Inventor interface layout.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 6 -->
+  <section id="lab-6" class="section alt-bg">
+    <div class="container">
+      <span class="section-tag">Lab 06</span>
+      <h2>Lab 6 — Additional Experiment / Integration</h2>
+      <p class="section-desc">
+        Section reserved for Lab 6 hardware/software integration (update the code or media inside <code>assets/lab6_demo.mp4</code> once finalized).
+      </p>
+      <div class="code-box-wrapper">
+        <div class="code-header"><span>lab6_integration.ino</span><button class="copy-btn">Copy</button></div>
+        <pre><code>// Lab 6 starter template
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Add Lab 6 sensor or actuator logic here
+  delay(200);
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL PROJECT -->
+  <section id="project" class="section">
+    <div class="container">
+      <span class="section-tag">Final Project</span>
+      <h2>Smart Dry & Wet Waste Segregation Bin</h2>
+      <p class="section-desc">
+        Arduino UNO prototype combining ultrasonic object detection, moisture sensing, and a servo-driven split lid to separate dry and wet waste.
+      </p>
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>Prototype Summary</h3>
+          <p>
+            An ultrasonic sensor on the rim detects when waste is placed on the lid, a moisture probe checks wetness, and the servo tilts the split lid toward the matching side.
+          </p>
+        </div>
+        <div class="media-card">
+          <video class="silent-video" controls muted loop playsinline preload="metadata">
+            <source src="assets/project_bin.mp4" type="video/mp4" />
+          </video>
+          <p class="caption">Final Project Demo (Muted): Smart waste segregation bin prototype.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>Engineering Exploration Lab · Dilpreet Singh</span>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
