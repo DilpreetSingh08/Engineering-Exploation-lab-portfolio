@@ -354,25 +354,80 @@ void loop() {
   <section id="lab-6" class="section alt-bg">
     <div class="container">
       <span class="section-tag">Lab 06</span>
-      <h2>Lab 6 — Additional Experiment / Integration</h2>
+      <h2>Ultrasonic Sensor + Servo Motor Automation</h2>
       <p class="section-desc">
-        Section reserved for Lab 6 hardware/software integration (update the code or media inside <code>assets/lab6_demo.mp4</code> once finalized).
+        Combining ultrasonic distance sensing with servo motor actuation and an indicator LED: when an object comes within 15 cm, the LED turns ON and the servo rotates to 90° before returning to 0°.
       </p>
+
+      <div class="two-col-layout">
+        <div class="card">
+          <h3>How It Works</h3>
+          <p>
+            The HC-SR04 ultrasonic sensor measures distance to an object in front of it. Once the distance drops to 15 cm or less, the Arduino UNO lights the LED on pin 13 and turns the servo on pin 6 to 90° for 2 seconds, then resets back to 0°.
+          </p>
+        </div>
+
+        <div class="media-card">
+          <img src="assets/lab6_wiring.jpeg" alt="Arduino UNO power and jumper wire connections for Lab 6" />
+          <p class="caption">Lab 6 Hardware Setup: Arduino UNO board with jumper wire connections.</p>
+        </div>
+      </div>
+
       <div class="code-box-wrapper">
-        <div class="code-header"><span>lab6_integration.ino</span><button class="copy-btn">Copy</button></div>
-        <pre><code>// Lab 6 starter template
+        <div class="code-header"><span>lab6_servo_sensor_control.ino</span><button class="copy-btn">Copy</button></div>
+        <pre><code>#include &lt;Servo.h&gt;
+
+const int trigPin = 9;
+const int echoPin = 10;
+const int ledPin = 13;
+const int servoPin = 6;
+
+const int triggerDistanceCm = 15;
+
+Servo gateServo;
+long duration;
+float distance;
+
 void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+
+  gateServo.attach(servoPin);
+  gateServo.write(0);
+  digitalWrite(ledPin, LOW);
+
   Serial.begin(9600);
 }
 
 void loop() {
-  // Add Lab 6 sensor or actuator logic here
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.0343 / 2.0;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  if (distance &gt; 0 &amp;&amp; distance &lt;= triggerDistanceCm) {
+    digitalWrite(ledPin, HIGH);
+    gateServo.write(90);
+    delay(2000);
+  } else {
+    digitalWrite(ledPin, LOW);
+    gateServo.write(0);
+  }
+
   delay(200);
 }</code></pre>
       </div>
     </div>
   </section>
-
   <!-- FINAL PROJECT -->
   <!-- FINAL PROJECT -->
   <section id="project" class="section">
