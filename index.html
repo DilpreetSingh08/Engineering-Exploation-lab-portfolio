@@ -374,30 +374,45 @@ void loop() {
   </section>
 
   <!-- FINAL PROJECT -->
+  <!-- FINAL PROJECT -->
   <section id="project" class="section">
     <div class="container">
-      <span class="section-tag">Final Project</span>
+      <span class="section-tag">Final Project · Group Prototype</span>
       <h2>Smart Dry & Wet Waste Segregation Bin</h2>
       <p class="section-desc">
-        Arduino UNO prototype combining ultrasonic object detection, moisture sensing, and a servo-driven split lid to separate dry and wet waste.
+        Mixed waste contaminates recyclables and slows down composting. Our Arduino UNO prototype separates wet and dry waste automatically at the bin lid using ultrasonic presence detection, moisture sensing, and servo actuation.
       </p>
+
       <div class="two-col-layout">
         <div class="card">
-          <h3>Prototype Summary</h3>
-          <p>
-            An ultrasonic sensor on the rim detects when waste is placed on the lid, a moisture probe checks wetness, and the servo tilts the split lid toward the matching side.
-          </p>
+          <h3>How the Hardware Components Work</h3>
+          <ul class="clean-list">
+            <li><strong>Arduino UNO (Controller):</strong> Reads live sensor inputs, compares them against programmed thresholds, and sends angle commands to the servo motor.</li>
+            <li><strong>Ultrasonic Sensor (HC-SR04):</strong> Mounted on the rim; sends a 40 kHz pulse and times the echo to detect when an object is placed on the lid.</li>
+            <li><strong>Moisture Sensor Probe:</strong> Measures electrical conductivity on contact—wet items conduct electricity and lower resistance, while dry items stay high-resistance.</li>
+            <li><strong>Micro Servo Motor:</strong> Attached to the centre pivot of the split blue/green lid; uses PWM signals to hold level (90°), tilt toward the green side for wet waste, or tilt toward the blue side for dry waste.</li>
+          </ul>
         </div>
+
         <div class="media-card">
           <video class="silent-video" controls muted loop playsinline preload="metadata">
             <source src="assets/project_bin.mp4" type="video/mp4" />
           </video>
-          <p class="caption">Final Project Demo (Muted): Smart waste segregation bin prototype.</p>
+          <p class="caption">Final Project Demo (Muted): Split blue/green lid, rim ultrasonic sensor, moisture probe, and servo motor actuation.</p>
         </div>
+      </div>
+
+      <div class="card">
+        <h3>Step-by-Step Operating Cycle</h3>
+        <ol class="clean-list">
+          <li><strong>Standby (90° Neutral):</strong> The servo keeps the split lid horizontal while the HC-SR04 scans across the top surface.</li>
+          <li><strong>Presence Trigger:</strong> Placing waste on the lid reduces the ultrasonic echo distance, triggering a short stabilization delay.</li>
+          <li><strong>Moisture Check:</strong> The Arduino samples the moisture probe to classify the item as wet or dry.</li>
+          <li><strong>Directional Tilt & Reset:</strong> The servo rotates to tilt the flap toward the green (wet) or blue (dry) bin half, waits for the item to drop, and returns to 90°.</li>
+        </ol>
       </div>
     </div>
   </section>
-
   <footer class="footer">
     <div class="container footer-inner">
       <span>Engineering Exploration Lab · Dilpreet Singh</span>
